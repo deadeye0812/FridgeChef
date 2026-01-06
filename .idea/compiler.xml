@@ -24,6 +24,7 @@
       <module name="EurekaServer" options="-parameters" />
       <module name="GateWay" options="-parameters" />
       <module name="Gateway" options="-parameters" />
+      <module name="InventoryManagementBackend" options="" />
       <module name="InventoryService" options="-parameters" />
       <module name="OpenFoodFactsService" options="-parameters" />
     </option>

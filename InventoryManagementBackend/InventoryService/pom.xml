@@ -6,9 +6,10 @@
         <groupId>org.fitness</groupId>
         <artifactId>InventoryManagementBackend</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
     </parent>
     <artifactId>InventoryService</artifactId>
+    <packaging>jar</packaging>
     <name>InventoryService</name>
     <description>InventoryService</description>
     <url/>
