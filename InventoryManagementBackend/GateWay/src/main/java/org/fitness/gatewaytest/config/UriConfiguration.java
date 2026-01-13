@@ -5,11 +5,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties
 public class UriConfiguration {
 
-    private String inventoryServiceUri = "http://localhost:8082";
+    private String inventoryServiceUri = "http://inventory-service:8082";
 
-    private String productServiceUri = "http://localhost:8081";
+    private String productServiceUri = "http://open-food-facts-service:8081";
 
-    private String aiServiceUri = "http://localhost:8083";
+    private String aiServiceUri = "http://ai-service:8083";
 
     public String getAiServiceUri() {
         return aiServiceUri;

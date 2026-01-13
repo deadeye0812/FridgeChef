@@ -1,0 +1,89 @@
+services:
+
+  eureka-server:
+    build: ./InventoryManagementBackend/EurekaServer
+    container_name: Eureka-Server
+    ports:
+      - "8761:8761"
+    networks:
+      - spring-net
+
+  inventory-service:
+    build: ./InventoryManagementBackend/InventoryService
+    container_name: Inventory-Service
+    depends_on:
+      - eureka-server
+      - postgres-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/inventoryManagement
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "8082:8082"
+    networks:
+      - spring-net
+
+  postgres-db:
+    env_file:
+      - environment.env
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    networks:
+      - spring-net
+
+  ai-service:
+    env_file:
+      - environment.env
+    build: ./InventoryManagementBackend/AiService
+    container_name: ai-service
+    depends_on:
+      - eureka-server
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+    ports:
+      - "8083:8083"
+    networks:
+      - spring-net
+
+  open-food-facts-service:
+    build: ./InventoryManagementBackend/OpenFoodFactsService
+    container_name: open-food-facts-service
+    depends_on:
+      - eureka-server
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "8081:8081"
+    networks:
+      - spring-net
+
+  gateway:
+    build: ./InventoryManagementBackend/GateWay
+    container_name: Gateway
+    depends_on:
+      - eureka-server
+      - open-food-facts-service
+      - ai-service
+      - inventory-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+    ports:
+      - "8080:8080"
+    networks:
+      - spring-net
+
+  frontend:
+    build: ./inventorymanagementfrontend
+    container_name: Frontend
+    depends_on:
+      - gateway
+    ports:
+      - "3000:3000"
+    networks:
+      - spring-net
+
+networks:
+  spring-net:
+    driver: bridge
